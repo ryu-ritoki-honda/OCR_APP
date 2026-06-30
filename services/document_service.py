@@ -23,7 +23,10 @@ class DocumentService:
 
         document = build_document(pages)
 
-        chunks = chunk_document(pages)
+        chunks = chunk_document(
+            pages,
+            filename="Uploaded PDF"
+        )
 
         return PipelineResult(
             pages=pages,

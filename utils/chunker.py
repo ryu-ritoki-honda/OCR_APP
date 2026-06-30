@@ -1,20 +1,62 @@
 from utils.models import DocumentChunk
 
 
-def chunk_document(pages):
+CHUNK_SIZE = 800
+CHUNK_OVERLAP = 150
+
+
+def chunk_document(
+    pages,
+    filename="Unknown"
+):
 
     chunks = []
 
-    for i, page in enumerate(pages):
+    chunk_id = 0
 
-        chunks.append(
+    for page in pages:
 
-            DocumentChunk(
-                chunk_id=i,
-                page_number=page.page_number,
-                text=page.merged_text
+        text = page.merged_text.strip()
+
+        if not text:
+            continue
+
+        start = 0
+
+        while start < len(text):
+
+            end = min(
+                start + CHUNK_SIZE,
+                len(text)
             )
 
-        )
+            chunk_text = text[start:end]
+
+            chunks.append(
+
+                DocumentChunk(
+
+                    id=chunk_id,
+
+                    page_number=page.page_number,
+
+                    filename=filename,
+
+                    title="",
+
+                    source=f"Page {page.page_number}",
+
+                    text=chunk_text
+
+                )
+
+            )
+
+            chunk_id += 1
+
+            if end == len(text):
+                break
+
+            start += CHUNK_SIZE - CHUNK_OVERLAP
 
     return chunks

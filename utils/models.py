@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
 from utils.vector_store import VectorStore
 from PIL import Image
@@ -21,10 +21,14 @@ class Document:
 
 @dataclass
 class DocumentChunk:
+    id: int
     page_number: int
-    chunk_id: int
+    filename: str
     text: str
+    title: str = ""
+    source: str = ""
     embedding: list[float] | None = None
+    metadata: dict = field(default_factory=dict)
 
 @dataclass
 class PipelineResult:

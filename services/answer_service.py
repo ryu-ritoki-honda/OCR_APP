@@ -25,10 +25,14 @@ class AnswerService:
         chunks
     ):
 
-        context = "\n\n".join(
-            chunk.text
-            for chunk in chunks
-        )
+        context = ""
+
+        for chunk in chunks:
+
+            context += (
+                f"[Page {chunk.page_number}]\n"
+                f"{chunk.text}\n\n"
+            )
 
         prompt = f"""
 You are a helpful assistant.
